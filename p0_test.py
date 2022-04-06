@@ -3,7 +3,7 @@ import lib
 def p0_simulator():
     user = 'tester'
     problem = 0
-    count = 1
+    count = 4
 
     ret = lib.start(user, problem, count)
     token = ret['token']

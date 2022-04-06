@@ -18,6 +18,13 @@ def action(token, cmds):
     uri = url + '/action'
     return requests.post(uri, headers={'X-Auth-Token': token}, json={'commands': cmds}).json()
 
+# 태울 승객 리스트에서 태운 승객들을 제거함
+def remove_enter_call(oncall_data, enter_call_list):
+    for enter_id in enter_call_list:
+        for call in oncall_data['calls']:
+            if call['id'] == enter_id:
+                oncall_data['calls'].remove(call)
+                break
 
 # 엘베 최대 수용 8명이 다 찼는지 여부
 def b_elev_full(elevator):
@@ -115,6 +122,9 @@ def enter_call(oncall_data, elevator):
         if call['start'] == elevator['floor']:
             if len(elevator['passengers']) + len(enter_call_list) < 8: # 엘베 정원을 초과하지 않도록 태울 승객 리스트를 추가
                 enter_call_list.append(call['id'])
-            else: return enter_call_list
+            else:
+                remove_enter_call(oncall_data, enter_call_list) # 태울 승객 리스트에서 태운 승객들을 제거함
+                return enter_call_list
+    remove_enter_call(oncall_data, enter_call_list) # 태울 승객 리스트에서 태운 승객들을 제거함
     return enter_call_list
 
