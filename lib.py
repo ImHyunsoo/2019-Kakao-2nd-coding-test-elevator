@@ -1,10 +1,23 @@
 import requests
+import os
+import psutil
+
 
 INF = 1e+9
 url = 'http://localhost:8000'
 
 
 def start(user, problem, count):
+    for proc in psutil.process_iter():
+        if proc.name() == 'elevator.exe':
+            proc.terminate()
+
+    server_path = r'C:\Users\ImHS\go\src\2019-blind-2nd-elevator\elevator\cmd\elevator\elevator.exe'
+    pwd = os.getcwd()
+    os.chdir(os.path.dirname(server_path))
+    os.startfile(server_path)
+    os.chdir(pwd)
+
     uri = url + '/start' + '/' + user + '/' + str(problem) + '/' + str(count)
     return requests.post(uri).json()
 
